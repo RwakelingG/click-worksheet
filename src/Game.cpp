@@ -50,10 +50,8 @@ bool Game::init()
 
 void Game::update(float dt)
 {
-	if (dragged != nullptr)
-	{
-		dragSprite(dragged);
-	}
+	dragSprite(dragged);
+	
 	
 	moveStamps();
 
@@ -119,12 +117,14 @@ void Game::mouseButtonPressed(sf::Event event)
 				passport_accepted = true;
 				passport_rejected = false;
 				menu_open = false;
+				return;
 			}
 			else if (reject_button.getGlobalBounds().contains(clickf))
 			{
 				passport_accepted = false;
 				passport_rejected = true;
 				menu_open = false;
+				return;
 			}
 		}
 		
@@ -170,11 +170,14 @@ void Game::keyReleased(sf::Event event)
 
 void Game::dragSprite(sf::Sprite* sprite)
 {
-	sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
-	sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
+	if (sprite != nullptr)
+	{
+		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+		sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
 
-	sf::Vector2f drag_position = mouse_positionf - drag_offset;
-	sprite->setPosition(drag_position.x,drag_position.y);
+		sf::Vector2f drag_position = mouse_positionf - drag_offset;
+		sprite->setPosition(drag_position.x, drag_position.y);
+	}	
 }
 
 void Game::newAnimal()
@@ -194,12 +197,7 @@ void Game::newAnimal()
 		should_accept = false;
 	}
 
-	if(character != nullptr)
-		delete character;
-
-	character = new sf::Sprite;
-
-	character->setTexture(animals[animal_index]);
+	character->setTexture(animals[animal_index], true);
 	character->setScale(1.8, 1.8);
 	character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
 

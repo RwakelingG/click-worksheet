@@ -30,15 +30,14 @@ class Game
   sf::RenderWindow& window;
 
   sf::Sprite* dragged = nullptr;
+
   sf::Vector2f drag_offset;
 
   sf::Sprite* character;
   sf::Sprite* passport;
 
   sf::Texture* animals = new sf::Texture[3];
-  sf::Texture* passports = new sf::Texture[3];
-
-  
+  sf::Texture* passports = new sf::Texture[3];  
   
   sf::Sprite accept;
   sf::Texture accept_texture;
