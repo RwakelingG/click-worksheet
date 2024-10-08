@@ -273,52 +273,52 @@ void Game::loadTextures()
 		std::cout << "Background texture did not load\n";
 	}
 
-	if (!animals[0].loadFromFile("../Data/Images/Document time/penguin.png"))
+	if (!animals[0].loadFromFile("../Data/Images/Critter Crossing Customs/penguin.png"))
 	{
 		std::cout << "Penguin texture did not load\n";
 	}
 
-	if (!animals[1].loadFromFile("../Data/Images/Document time/elephant.png"))
+	if (!animals[1].loadFromFile("../Data/Images/Critter Crossing Customs/elephant.png"))
 	{
 		std::cout << "Elephant texture did not load\n";
 	}
 
-	if (!animals[2].loadFromFile("../Data/Images/Document time/moose.png"))
+	if (!animals[2].loadFromFile("../Data/Images/Critter Crossing Customs/moose.png"))
 	{
 		std::cout << "Elephant texture did not load\n";
 	}
 
-	if (!passports[0].loadFromFile("../Data/Images/Document time/penguin passport.png"))
+	if (!passports[0].loadFromFile("../Data/Images/Critter Crossing Customs/penguin passport.png"))
 	{
 		std::cout << "Penguin passport texture did not load\n";
 	}
 
-	if (!passports[1].loadFromFile("../Data/Images/Document time/elephant passport.png"))
+	if (!passports[1].loadFromFile("../Data/Images/Critter Crossing Customs/elephant passport.png"))
 	{
 		std::cout << "Elephant passport texture did not load\n";
 	}
 
-	if (!passports[2].loadFromFile("../Data/Images/Document time/moose passport.png"))
+	if (!passports[2].loadFromFile("../Data/Images/Critter Crossing Customs/moose passport.png"))
 	{
 		std::cout << "Moose passport texture did not load\n";
 	}
 
-	if (!accept_texture.loadFromFile("../Data/Images/Document time/accept.png"))
+	if (!accept_texture.loadFromFile("../Data/Images/Critter Crossing Customs/accept.png"))
 	{
 		std::cout << "Accept texture did not load\n";
 	}
 
-	if (!reject_texture.loadFromFile("../Data/Images/Document time/reject.png"))
+	if (!reject_texture.loadFromFile("../Data/Images/Critter Crossing Customs/reject.png"))
 	{
 		std::cout << "Reject texture did not load\n";
 	}
 
-	if (!accept_button_texture.loadFromFile("../Data/Images/Document time/accept button.png"))
+	if (!accept_button_texture.loadFromFile("../Data/Images/Critter Crossing Customs/accept button.png"))
 	{
 		std::cout << "Accept texture did not load\n";
 	}
 
-	if (!reject_button_texture.loadFromFile("../Data/Images/Document time/reject button.png"))
+	if (!reject_button_texture.loadFromFile("../Data/Images/Critter Crossing Customs/reject button.png"))
 	{
 		std::cout << "Reject texture did not load\n";
 	}
