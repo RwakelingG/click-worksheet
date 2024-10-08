@@ -9,7 +9,7 @@ int main()
             << std::endl;
 
     // create window and set up
-    sf::RenderWindow window(sf::VideoMode(1080, 720), "Document time");
+    sf::RenderWindow window(sf::VideoMode(1080, 720), "Critter Crossing Customs");
     window.setFramerateLimit(60);
 
     //initialise an instance of the game class
