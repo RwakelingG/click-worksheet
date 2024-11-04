@@ -17,7 +17,7 @@ class Game
   void mouseButtonReleased(sf::Event event);
   void keyPressed(sf::Event event);
   void keyReleased(sf::Event event);
-  void dragSprite(sf::Sprite*);
+  void dragSprite(std::shared_ptr<sf::Sprite> sprite);
   void stampOffsets();
   void moveStamps();
   void toggleMenu();
@@ -29,15 +29,15 @@ class Game
  private:
   sf::RenderWindow& window;
 
-  sf::Sprite* dragged = nullptr;
+  std::shared_ptr<sf::Sprite> sp_dragged = nullptr;
 
   sf::Vector2f drag_offset;
 
-  sf::Sprite* character;
-  sf::Sprite* passport;
+  std::unique_ptr<sf::Sprite> up_character;
+  std::shared_ptr<sf::Sprite> sp_passport;
 
-  sf::Texture* animals = new sf::Texture[3];
-  sf::Texture* passports = new sf::Texture[3];  
+  std::vector<std::unique_ptr<sf::Texture>> up_animals;
+  std::vector<std::unique_ptr<sf::Texture>> up_passports;
   
   sf::Sprite accept;
   sf::Texture accept_texture;
@@ -63,7 +63,7 @@ class Game
   bool character_visible = true;
   bool passport_visible = true;
 
-  bool should_accept;
+  bool should_accept = false;
 
   int lives;
 };

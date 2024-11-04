@@ -6,28 +6,30 @@ Game::Game(sf::RenderWindow& game_window)
   : window(game_window)
 {
   srand(time(NULL));
+
+  up_character = std::make_unique<sf::Sprite>();
+  sp_passport = std::make_unique<sf::Sprite>();
+
+  
 }
 
 Game::~Game()
 {
-	delete [] animals;
-	delete [] passports;
-	delete character;
-	delete passport;
+
+
 }
 
 bool Game::init()
 {
-	character = new sf::Sprite;
-	passport = new sf::Sprite;
+	
 
 	loadTextures();
 
 	background.setTexture(background_texture);
 
-	character->setTexture(animals[0]);
-	character->setScale(1.8,1.8);
-	character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
+	//up_character->setTexture(animals[0]);
+	//up_character->setScale(1.8,1.8);
+	//up_character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
 
 	accept.setTexture(accept_texture);
 	reject.setTexture(reject_texture);
@@ -35,22 +37,21 @@ bool Game::init()
 	accept_button.setTexture(accept_button_texture);
 	reject_button.setTexture(reject_button_texture);
 
-	passport->setTexture(passports[0]);
-	passport->setScale(0.6, 0.6);
-	passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
-
-	stampOffsets();
+	//sp_passport->setTexture(passports[0]);
+	//sp_passport->setScale(0.6, 0.6);
+	//sp_passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
 
 	lives = 5;
 
 	newAnimal();
+	stampOffsets();
 
 	return true;
 }
 
 void Game::update(float dt)
 {
-	dragSprite(dragged);
+	dragSprite(sp_dragged);
 	
 	
 	moveStamps();
@@ -63,9 +64,9 @@ void Game::render()
 	window.draw(background);
 	
 
-	window.draw(*character);
+	window.draw(*up_character);
 
-	window.draw(*passport);
+	window.draw(*sp_passport);
 
 	if (passport_accepted)
 	{
@@ -103,10 +104,10 @@ void Game::mouseButtonPressed(sf::Event event)
 
 		if (!menu_open)
 		{
-			sf::Vector2f passport_positionf = passport->getPosition();
-			if (passport->getGlobalBounds().contains(clickf))
+			sf::Vector2f passport_positionf = sp_passport->getPosition();
+			if (sp_passport->getGlobalBounds().contains(clickf))
 			{
-				dragged = passport;
+				sp_dragged = sp_passport;
 				drag_offset = clickf - passport_positionf;
 			}
 		}
@@ -139,9 +140,9 @@ void Game::mouseButtonReleased(sf::Event event)
 {
 	if (event.mouseButton.button == sf::Mouse::Left)
 	{
-		if (dragged != nullptr)
+		if (sp_dragged != nullptr)
 		{
-			sf::Vector2f passport_position = dragged->getPosition();
+			sf::Vector2f passport_position = sp_dragged->getPosition();
 
 			if (passport_position.x < window.getSize().x / 5
 				&& passport_position.y < window.getSize().y / 5)
@@ -149,7 +150,7 @@ void Game::mouseButtonReleased(sf::Event event)
 				returnPassport();
 			}
 
-			dragged = nullptr;
+			sp_dragged = nullptr;
 		}
 	}
 	if (event.mouseButton.button == sf::Mouse::Right)
@@ -168,7 +169,7 @@ void Game::keyReleased(sf::Event event)
 
 }
 
-void Game::dragSprite(sf::Sprite* sprite)
+void Game::dragSprite(std::shared_ptr<sf::Sprite> sprite)
 {
 	if (sprite != nullptr)
 	{
@@ -197,32 +198,32 @@ void Game::newAnimal()
 		should_accept = false;
 	}
 
-	character->setTexture(animals[animal_index], true);
-	character->setScale(1.8, 1.8);
-	character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
+	up_character->setTexture(*up_animals[animal_index], true);
+	up_character->setScale(1.8, 1.8);
+	up_character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
 
-	passport->setTexture(passports[passport_index]);
-	passport->setScale(0.6, 0.6);
-	passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
+	sp_passport->setTexture(*up_passports[passport_index]);
+	sp_passport->setScale(0.6, 0.6);
+	sp_passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
 
 }
 
 void Game::stampOffsets()
 {
-	float accept_x = passport->getGlobalBounds().width / 2 - accept.getGlobalBounds().width / 2;
-	float accept_y = passport->getGlobalBounds().height / 4 - accept.getGlobalBounds().height / 2;
+	float accept_x = sp_passport->getGlobalBounds().width / 2 - accept.getGlobalBounds().width / 2;
+	float accept_y = sp_passport->getGlobalBounds().height / 4 - accept.getGlobalBounds().height / 2;
 	accept_offset.x = accept_x;
 	accept_offset.y = accept_y;
 
-	float reject_x = passport->getGlobalBounds().width / 2 - reject.getGlobalBounds().width / 2;
-	float reject_y = passport->getGlobalBounds().height / 4 - reject.getGlobalBounds().height / 2;
+	float reject_x = sp_passport->getGlobalBounds().width / 2 - reject.getGlobalBounds().width / 2;
+	float reject_y = sp_passport->getGlobalBounds().height / 4 - reject.getGlobalBounds().height / 2;
 	reject_offset.x = reject_x;
 	reject_offset.y = reject_y;
 }
 
 void Game::moveStamps()
 {
-	sf::Vector2f passport_position = passport->getPosition();
+	sf::Vector2f passport_position = sp_passport->getPosition();
 	
 	accept.setPosition(passport_position + accept_offset);
 	reject.setPosition(passport_position + reject_offset);
@@ -273,32 +274,41 @@ void Game::loadTextures()
 		std::cout << "Background texture did not load\n";
 	}
 
-	if (!animals[0].loadFromFile("../Data/Images/Critter Crossing Customs/penguin.png"))
+	up_animals.emplace_back(std::make_unique<sf::Texture>());
+	up_animals.emplace_back(std::make_unique<sf::Texture>());
+	up_animals.emplace_back(std::make_unique<sf::Texture>());
+
+	up_passports.emplace_back(std::make_unique<sf::Texture>());
+	up_passports.emplace_back(std::make_unique<sf::Texture>());
+	up_passports.emplace_back(std::make_unique<sf::Texture>());
+
+
+	if (!up_animals[0]->loadFromFile("../Data/Images/Critter Crossing Customs/penguin.png"))
 	{
 		std::cout << "Penguin texture did not load\n";
 	}
 
-	if (!animals[1].loadFromFile("../Data/Images/Critter Crossing Customs/elephant.png"))
+	if (!up_animals[1]->loadFromFile("../Data/Images/Critter Crossing Customs/elephant.png"))
 	{
 		std::cout << "Elephant texture did not load\n";
 	}
 
-	if (!animals[2].loadFromFile("../Data/Images/Critter Crossing Customs/moose.png"))
+	if (!up_animals[2]->loadFromFile("../Data/Images/Critter Crossing Customs/moose.png"))
 	{
 		std::cout << "Elephant texture did not load\n";
 	}
 
-	if (!passports[0].loadFromFile("../Data/Images/Critter Crossing Customs/penguin passport.png"))
+	if (!up_passports[0]->loadFromFile("../Data/Images/Critter Crossing Customs/penguin passport.png"))
 	{
 		std::cout << "Penguin passport texture did not load\n";
 	}
 
-	if (!passports[1].loadFromFile("../Data/Images/Critter Crossing Customs/elephant passport.png"))
+	if (!up_passports[1]->loadFromFile("../Data/Images/Critter Crossing Customs/elephant passport.png"))
 	{
 		std::cout << "Elephant passport texture did not load\n";
 	}
 
-	if (!passports[2].loadFromFile("../Data/Images/Critter Crossing Customs/moose passport.png"))
+	if (!up_passports[2]->loadFromFile("../Data/Images/Critter Crossing Customs/moose passport.png"))
 	{
 		std::cout << "Moose passport texture did not load\n";
 	}
